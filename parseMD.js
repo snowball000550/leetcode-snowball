@@ -12,55 +12,55 @@ const data10 = ['a']
 
 
 
-var getNumOfLetterOfString = function(s, l) {
-    return s.split(l).length;
-}
-
-var checkDataFormatt = function(s){
-    if (getSharpNum(s, '#') === 1) {
-        return [false, 'error1'];
+var getNumOfSharpInTitle = function(s) {
+    let amount = 0;
+    for (let i = 0; i < s.length; i++) {
+        if (s[i] === '#') {
+            amount += 1;
+        } else {
+            break;
+        }
     }
-    return [true, ''];
+    return amount;
 }
 
-var setNewOrderArray = function(obj, arr, item, item_before){
+// 检查标题中是否以#开头，#长度是否超过6，是否包含至少一个空格
+var checkDataFormatt = function(s){
+    if (getNumOfSharpInTitle(s) === 0 || getNumOfSharpInTitle(s) > 6) {
+        return false;
+    }
+}
 
+
+var setNewOrderArray = function(list, item, pre_item = ''){
+    let count1 = getNumOfLetterOfString(item, '#') - 2;
+    let count2 = getNumOfLetterOfString(pre_item, '#') - 2;
+    if (count1 - count2 <= 1) {
+        list[count1] = list[count1] ? list[count1] + 1 : 1;
+    } else {
+        for (let i = 0; i < count1 - count2; i++) {
+            // TODO:补充跳级序号
+        }
+    }
 }
 
 
 // only order
 var parseMD = function(data){
     let orderArr = [];
-    const obj = {};
+    const list = [];
+    let new_order = '';
 
     try {
         if (data.length === 0) {
             return [];
-        }else if (data.length === 1) {
-            if (!checkDataFormatt(data[0])[0]){
-                return [];
-            } else {
-                setNewOrderArray(orderArr, data[0])
-            }
         } else {
             for(let i = 0; i < data.length; i++){
                 if (!checkDataFormatt(data[i])[0]){
                     continue;
                 } else {
-                    // let order = '';
-                    // let index = getSharpNum(data[i]) - 1;
-                    // if ((i >= 1 && getSharpNum(data[i]) - getSharpNum(data[i-1]) > 1)) {
-                        
-                    // }
-                    // if ( i === 0 || !orderArr[index-1] || getSharpNum(data[i]) - getSharpNum(data[i-1]) === 1 ) {
-                    //     orderArr[index-1] = 1;
-                    // } else {
-                    //     orderArr[index-1] += 1;
-                    // }
-                    // for (let i = 0; i < index; i++) {
-                    //     order += index ===1 || i === index - 1 ? orderArr[i] : orderArr[i] + '.';
-                    // }
-                    [orderArr, obj] = setNewOrderArray(obj, orderArr, data[i], data[i - 1])
+                    [new_order, list] = setNewOrderArray(list, data[i], data[i - 1])
+                    orderArr.push(...new_order);
                 }
                     
             }
@@ -75,7 +75,19 @@ var parseMD = function(data){
 
 
 
-
+       // let order = '';
+                    // let index = getSharpNum(data[i]) - 1;
+                    // if ((i >= 1 && getSharpNum(data[i]) - getSharpNum(data[i-1]) > 1)) {
+                        
+                    // }
+                    // if ( i === 0 || !orderArr[index-1] || getSharpNum(data[i]) - getSharpNum(data[i-1]) === 1 ) {
+                    //     orderArr[index-1] = 1;
+                    // } else {
+                    //     orderArr[index-1] += 1;
+                    // }
+                    // for (let i = 0; i < index; i++) {
+                    //     order += index ===1 || i === index - 1 ? orderArr[i] : orderArr[i] + '.';
+                    // }
 
 
 
