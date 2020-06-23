@@ -11,30 +11,30 @@ const data9 = ['#a','##b','###c','#d','###e',]
 const data10 = ['a']
 
 
-
-var getNumOfSharpInTitle = function(s) {
-    let amount = 0;
-    for (let i = 0; i < s.length; i++) {
-        if (s[i] === '#') {
-            amount += 1;
-        } else {
-            break;
-        }
-    }
-    return amount;
-}
-
 // 检查标题中是否以#开头，#长度是否超过6，是否包含至少一个空格
 var checkDataFormatt = function(s){
-    if (getNumOfSharpInTitle(s) === 0 || getNumOfSharpInTitle(s) > 6) {
-        return false;
+    let amount = 0;
+    if (s[0] !== '#') return false;
+    for (let i = 0; i < s.length; i++) {
+        if (s[i] === '#') {
+            if(i === s.length - 1) {
+                return true;
+            }
+            amount += 1;
+        } else {
+            if (s[i + 1] = ' ' && i <= 6) {
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }
 
 
-var setNewOrderArray = function(list, item, pre_item = ''){
+var setNewOrderArray = function(list, item){
     let count1 = getNumOfLetterOfString(item, '#') - 2;
-    let count2 = getNumOfLetterOfString(pre_item, '#') - 2;
+    let count2 = list[list.length - 1].split('.').length;
     if (count1 - count2 <= 1) {
         list[count1] = list[count1] ? list[count1] + 1 : 1;
     } else {
@@ -48,18 +48,18 @@ var setNewOrderArray = function(list, item, pre_item = ''){
 // only order
 var parseMD = function(data){
     let orderArr = [];
-    const list = [];
+    const order_list = [];
     let new_order = '';
-
+    const len = data.length;
     try {
-        if (data.length === 0) {
+        if (len === 0) {
             return [];
         } else {
-            for(let i = 0; i < data.length; i++){
-                if (!checkDataFormatt(data[i])[0]){
+            for(let i = 0; i < len; i++){
+                if (!checkDataFormatt(data[i])){
                     continue;
                 } else {
-                    [new_order, list] = setNewOrderArray(list, data[i], data[i - 1])
+                    [new_order, order_list] = setNewOrderArray(order_list, data[i])
                     orderArr.push(...new_order);
                 }
                     
