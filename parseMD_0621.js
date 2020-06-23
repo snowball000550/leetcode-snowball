@@ -11,58 +11,76 @@ const data9 = ['#a','##b','###c','#d','###e',]
 const data10 = ['a']
 
 
-// 检查标题中是否以#开头，#长度是否超过6，是否包含至少一个空格
+// 检查标题中是否以#开头，#长度是否超过6，全部为#或#后为空格
 var checkDataFormatt = function(s){
     let amount = 0;
-    if (s[0] !== '#') return false;
+    if (s[0] !== '#') return [false];
     for (let i = 0; i < s.length; i++) {
         if (s[i] === '#') {
-            if(i === s.length - 1) {
-                return true;
-            }
             amount += 1;
-        } else {
-            if (s[i + 1] = ' ' && i <= 6) {
-                return true;
-            } else {
-                return false;
+            if((i === s.length - 1 || s[i + 1] === ' ') && i <= 6) {
+                return [true, amount];
+            } else if (i > 6) {
+                return [false]
             }
         }
     }
 }
 
-
-var setNewOrderArray = function(list, item){
-    let count1 = getNumOfLetterOfString(item, '#') - 2;
-    let count2 = list[list.length - 1].split('.').length;
-    if (count1 - count2 <= 1) {
+var setNewOrderArray = function(list, item, tempArr){
+    let count1 = checkDataFormatt(item)[1] - 1; // #数量 - 1，存入数组
+    let count2 = 0; // 前一序号层级数
+    const order_list = [] //结果存为数组，由于有添加层级情况
+    if (tempArr.length > 0){
+        count2 = tempArr[tempArr.length - 1].split('.').length;
+    }
+    let order_text = '';
+    // 层级变小，序列号重置
+    if (count1 - count2 <= -2) {
+        for (let i = count1 + 1; i <= count2; i++) {
+            list[i] = 0;
+        }
+    } 
+    // 层级结果
+    if (count1 - count2 < 1) { // 未跳级情况
         list[count1] = list[count1] ? list[count1] + 1 : 1;
-    } else {
-        for (let i = 0; i < count1 - count2; i++) {
-            // TODO:补充跳级序号
+        for (let i = 0; i <= count1; i++) {
+            order_text += count1 === 0 || i === count1 ? list[i] : list[i] + '.';
+        }
+        order_list.push(order_text);
+    } else { // 跳级情况
+        for (let i = count2; i <= count1; i++) {
+            list[i] = 1; 
+            order_text = '';
+            // 每一个层级补全
+            for ( let j = 0; j <= i; j++) {
+                order_text += i === 0 || j === i ? list[j] : list[j] + '.';
+            }
+            order_list.push(order_text);
         }
     }
+    return [order_list, list]
+
 }
 
 
 // only order
 var parseMD = function(data){
     let orderArr = [];
-    const order_list = [];
-    let new_order = '';
+    let order_list = [];
+    let new_order = [];
     const len = data.length;
     try {
         if (len === 0) {
             return [];
         } else {
             for(let i = 0; i < len; i++){
-                if (!checkDataFormatt(data[i])){
+                if (!checkDataFormatt(data[i])[0]){
                     continue;
                 } else {
-                    [new_order, order_list] = setNewOrderArray(order_list, data[i])
+                    [new_order, order_list] = setNewOrderArray(order_list, data[i], orderArr)
                     orderArr.push(...new_order);
                 }
-                    
             }
         }
         return orderArr;
