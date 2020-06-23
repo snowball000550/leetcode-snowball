@@ -84,25 +84,7 @@ var parseMD = function(data){
 
 
 
-       // let order = '';
-                    // let index = getSharpNum(data[i]) - 1;
-                    // if ((i >= 1 && getSharpNum(data[i]) - getSharpNum(data[i-1]) > 1)) {
-                        
-                    // }
-                    // if ( i === 0 || !orderArr[index-1] || getSharpNum(data[i]) - getSharpNum(data[i-1]) === 1 ) {
-                    //     orderArr[index-1] = 1;
-                    // } else {
-                    //     orderArr[index-1] += 1;
-                    // }
-                    // for (let i = 0; i < index; i++) {
-                    //     order += index ===1 || i === index - 1 ? orderArr[i] : orderArr[i] + '.';
-                    // }
-
-
-
-
-
-// with title
+// TODO:with title
 // var parseMD = function(data) {
 //     const orderArr = [];
 //     const newArr = [];
