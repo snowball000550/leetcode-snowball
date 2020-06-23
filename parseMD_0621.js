@@ -1,14 +1,4 @@
-const data1 = ['#a']
-const data2 = ['#a','##b']
-const data3 = ['#a','#b','##c']
-const data4 = ['#a','##b','###c','#d']
-const data5 = ['#a','##b','###c','#d','##e']
-const data6 = ['#a','# #b','## #c','#d','## e','###f','# ##g', '##h','##i', '###j']
-
-const data7 = []
-const data8 = ['#a','b','## #c']
-const data9 = ['#a','##b','###c','#d','###e',]
-const data10 = ['a']
+const data = ['# a', '## b', '### c', '### d', '# e', '# f', '## g','#### h', '1#### ## ##', '#', '########']
 
 
 // 检查标题中是否以#开头，#长度是否超过6，全部为#或#后为空格
@@ -27,8 +17,8 @@ var checkDataFormatt = function(s){
     }
 }
 
-var setNewOrderArray = function(list, item, tempArr){
-    let count1 = checkDataFormatt(item)[1] - 1; // #数量 - 1，存入数组
+var setNewOrderArray = function(list, currentLevel, tempArr){
+    let count1 = currentLevel - 1; // #数量 - 1，存入数组
     let count2 = 0; // 前一序号层级数
     const order_list = [] //结果存为数组，由于有添加层级情况
     if (tempArr.length > 0){
@@ -75,10 +65,11 @@ var parseMD = function(data){
             return [];
         } else {
             for(let i = 0; i < len; i++){
-                if (!checkDataFormatt(data[i])[0]){
+                [a, b] = checkDataFormatt(data[i])
+                if (!a){
                     continue;
                 } else {
-                    [new_order, order_list] = setNewOrderArray(order_list, data[i], orderArr)
+                    [new_order, order_list] = setNewOrderArray(order_list, b, orderArr)
                     orderArr.push(...new_order);
                 }
             }
