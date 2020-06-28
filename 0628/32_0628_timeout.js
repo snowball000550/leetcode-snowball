@@ -5,6 +5,31 @@
  * @param {string} s
  * @return {number}
  */
+
+// resolve 2
+var longestValidParentheses = function(s){
+    const temp = [{type: 0, index: 0}];
+    const len = s.length;
+    let max = 0;
+    let num = 0;
+    for (let i = 0; i < len; i++){
+        if (s[i] === '(') {
+            temp.push({type:'(', index: i + 1})
+        } else if (s[i] === ')' && temp[temp.length - 1].type === '(') {
+            temp.pop()
+        } else {
+            temp.push({type: ')', index: i + 1})
+        }
+    }
+    temp.push({type: 0, index: s.length + 1});
+    for (let j = 0; j < temp.length - 1; j++) {
+        num = temp[j + 1].index - temp[j].index - 1;
+        max = max > num ? max: num;
+    }
+    return max;
+}
+
+// resolve1,timeout
 var longestValidParentheses = function(s) {
     const len = s.length;
     let max = 0;

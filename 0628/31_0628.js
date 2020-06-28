@@ -15,6 +15,11 @@
  * @return {void} Do not return anything, modify nums in-place instead.
  */
 var nextPermutation = function(nums) {
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var nextPermutation = function(nums) {
     const len = nums.length;
     if (len === 0 || len === 1) {
         return nums;
@@ -22,8 +27,16 @@ var nextPermutation = function(nums) {
     let min = len - 1;
     for (let i = len - 1; i >= 1; i--) {
         if (nums[i] > nums[i - 1]) {
-            nums = swap(nums, i - 1, min);
-            nums = reverse(nums, i, len - 1);
+            for(let j = len - 1; j >= 0; j--){
+                if (nums[j] > nums[i - 1]){
+                    min = j;
+                    break;
+                }
+            }
+            nums = swap(nums, i - 1, min)
+            if(i !== len - 1) {
+                nums = reverse(nums, i, len - 1);
+            }
             return nums;
         } else {
             if (nums[i] < nums[min]) {
@@ -31,7 +44,7 @@ var nextPermutation = function(nums) {
             }
         }
     }
-    nums = nums.sort((a, b) => a - b);
+    nums.sort((a, b) => a - b)
     return nums;
 };
 
@@ -43,6 +56,10 @@ var swap = function(list, i, j) {
 }
 
 var reverse = function(list, i, j) {
-    list = list.slice(0, i).concat(list.slice(i).sort((a,b) => a - b))
+    while(i < j) {
+        [list[i],list[j]] = [list[j], list[i]];
+        i++;
+        j--;
+    }
     return list;
 }
