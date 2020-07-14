@@ -20,7 +20,6 @@ var threeSumClosest = function(nums, target) {
                 } else if (!diff_2 || Math.abs(diff_2) > Math.abs(diff - (nums[j] + nums[k]))) {
                     diff_2 = diff - (nums[j] + nums[k]);
                     result = nums[i] + nums[j] + nums[k];
-                    console.log(i, j, k)
                 }
             }
         }
